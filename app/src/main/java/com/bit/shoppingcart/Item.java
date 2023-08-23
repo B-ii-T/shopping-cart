@@ -13,11 +13,13 @@ public class Item {
     private int id;
     private String itemName;
     private int itemQuantity;
+    private double unitPrice;
     private int listId;
 
-    public Item(String itemName, int itemQuantity, int listId) {
+    public Item(String itemName, int itemQuantity, double unitPrice, int listId) {
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
+        this.unitPrice = unitPrice;
         this.listId = listId;
     }
 
@@ -35,6 +37,10 @@ public class Item {
 
     public int getItemQuantity() {
         return itemQuantity;
+    }
+
+    public double getUnitPrice() {
+        return unitPrice;
     }
 
     public int getListId() {
