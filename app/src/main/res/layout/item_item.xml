@@ -98,7 +98,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginStart="5dp"
                 android:layout_toEndOf="@id/total_value"
-                android:text="DA"
+                android:text="@string/currency"
                 android:textColor="@color/white" />
         </RelativeLayout>
 
