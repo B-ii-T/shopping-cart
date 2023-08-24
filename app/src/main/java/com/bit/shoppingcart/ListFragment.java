@@ -26,7 +26,7 @@ public class ListFragment extends Fragment {
         RecyclerView listRecycler = rootview.findViewById(R.id.list_recyclerview);
         listRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ArrayList<List> listList = new ArrayList<>();
-        ListAdapter listAdapter = new ListAdapter(listList);
+        ListAdapter listAdapter = new ListAdapter(getContext(), listList);
         listRecycler.setAdapter(listAdapter);
         MainActivity.listViewModel.getAllLists().observe(getViewLifecycleOwner(), new Observer<java.util.List<List>>() {
             @Override

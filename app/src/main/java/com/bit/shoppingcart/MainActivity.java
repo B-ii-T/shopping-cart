@@ -13,6 +13,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static ListViewModel listViewModel;
+    public static ItemViewModel itemViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,7 +21,8 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
-        listViewModel = new ViewModelProvider(this).get(ListViewModel.class);;
+        listViewModel = new ViewModelProvider(this).get(ListViewModel.class);
+        itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
         ListFragment listFragment = new ListFragment();
         getSupportFragmentManager().beginTransaction().replace(R.id.frame, listFragment).commit();
     }

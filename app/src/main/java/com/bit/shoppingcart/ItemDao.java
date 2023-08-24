@@ -21,4 +21,6 @@ public interface ItemDao {
     void deleteAll();
     @Query("SELECT * FROM item_table")
     LiveData<List<Item>> getAllItems();
+    @Query("SELECT count(*) FROM item_table WHERE listId = :listId")
+    LiveData<Integer> listItemCount(int listId);
 }

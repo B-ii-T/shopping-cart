@@ -10,6 +10,7 @@ import java.util.List;
 public class ItemRepo {
     private ItemDao itemDao;
     private LiveData<List<Item>> items;
+    private LiveData<Integer> listItemCount;
 
     public ItemRepo(Application app) {
         Database database = Database.getDbInstance(app);
@@ -31,6 +32,10 @@ public class ItemRepo {
 
     public LiveData<List<Item>> getItems() {
         return items;
+    }
+    public LiveData<Integer> getItemCount(int listId) {
+        listItemCount = itemDao.listItemCount(listId);
+        return listItemCount;
     }
 
     private static class InsertAsync extends AsyncTask<Item, Void, Void>{

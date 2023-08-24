@@ -11,6 +11,7 @@ import java.util.List;
 public class ItemViewModel extends AndroidViewModel {
     private ItemRepo itemRepo;
     private LiveData<java.util.List<Item>> items;
+    LiveData<Integer> listItemCount;
     public ItemViewModel(@NonNull Application application) {
         super(application);
         itemRepo = new ItemRepo(application);
@@ -30,5 +31,9 @@ public class ItemViewModel extends AndroidViewModel {
     }
     public LiveData<List<Item>> getAllItems() {
         return items;
+    }
+    public LiveData<Integer> getItemCount(int listId) {
+        listItemCount = itemRepo.getItemCount(listId);
+        return listItemCount;
     }
 }
