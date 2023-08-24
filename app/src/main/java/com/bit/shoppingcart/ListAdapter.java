@@ -47,7 +47,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return lists.size();
     }
 
-    public void setItems(List<com.bit.shoppingcart.List> lists){
+    public void setLists(List<com.bit.shoppingcart.List> lists){
         this.lists = lists;
         notifyDataSetChanged();
     }

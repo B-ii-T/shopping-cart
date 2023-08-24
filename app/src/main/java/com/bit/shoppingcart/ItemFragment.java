@@ -10,7 +10,12 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 public class ItemFragment extends Fragment {
     @Nullable
@@ -18,6 +23,16 @@ public class ItemFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.item_list, container, false);
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
+        itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        ArrayList<Item> itemList = new ArrayList<>();
+        ItemAdapter itemAdapter = new ItemAdapter(getContext(), itemList);
+        itemRecycler.setAdapter(itemAdapter);
+        MainActivity.itemViewModel.getAllItems().observe(getViewLifecycleOwner(), new Observer<java.util.List<Item>>() {
+            @Override
+            public void onChanged(java.util.List<Item> items) {
+                itemAdapter.setItems(items);
+            }
+        });
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

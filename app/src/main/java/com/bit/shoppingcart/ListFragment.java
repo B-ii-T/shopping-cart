@@ -31,7 +31,7 @@ public class ListFragment extends Fragment {
         MainActivity.listViewModel.getAllLists().observe(getViewLifecycleOwner(), new Observer<java.util.List<List>>() {
             @Override
             public void onChanged(java.util.List<List> lists) {
-                listAdapter.setItems(lists);
+                listAdapter.setLists(lists);
             }
         });
         return rootview;
