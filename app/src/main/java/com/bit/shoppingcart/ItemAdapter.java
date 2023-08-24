@@ -34,6 +34,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         Item currentItem = items.get(position);
         holder.itemName.setText(currentItem.getItemName());
         holder.itemQnt.setText(String.valueOf(currentItem.getItemQuantity()));
+        MainActivity.itemViewModel.getItemTotal(currentItem.getId()).observe((LifecycleOwner) context, new Observer<Double>() {
+            @Override
+            public void onChanged(Double itemTotal) {
+                holder.totalPrice.setText(String.valueOf(itemTotal));
+            }
+        });
     }
 
     @Override
@@ -53,7 +59,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
             itemQnt = itemView.findViewById(R.id.item_qnt_value);
-            totalPrice = itemName.findViewById(R.id.total_value);
+            totalPrice = itemView.findViewById(R.id.total_value);
         }
     }
 }
