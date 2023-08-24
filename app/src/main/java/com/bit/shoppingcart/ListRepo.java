@@ -10,11 +10,13 @@ import java.util.List;
 public class ListRepo {
     private ListDao listDao;
     private LiveData<List<com.bit.shoppingcart.List>> lists;
+    private LiveData<Integer> listCount;
 
     public ListRepo(Application app) {
         Database database = Database.getDbInstance(app);
         listDao = database.listDao();
         lists = listDao.getAllLists();
+        listCount = listDao.getListCount();
     }
     public void insert(com.bit.shoppingcart.List list){
         new InsertAsync(listDao).execute(list);
@@ -31,6 +33,10 @@ public class ListRepo {
 
     public LiveData<List<com.bit.shoppingcart.List>> getLists() {
         return lists;
+    }
+
+    public LiveData<Integer> getListCount() {
+        return listCount;
     }
 
     private static class InsertAsync extends AsyncTask<com.bit.shoppingcart.List, Void, Void>{

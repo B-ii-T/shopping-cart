@@ -46,6 +46,12 @@ public class ItemFragment extends Fragment {
                 }
             }
         });
+        MainActivity.itemViewModel.getItemCount(listId).observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer itemCount) {
+                MainActivity.headerText.setText("All items"+" "+"("+itemCount+")");
+            }
+        });
 
         addItemBtn.setOnClickListener(v -> {
             Bundle args = new Bundle();

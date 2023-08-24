@@ -11,10 +11,12 @@ import java.util.List;
 public class ListViewModel extends AndroidViewModel {
     private ListRepo listRepo;
     private LiveData<List<com.bit.shoppingcart.List>> lists;
+    private LiveData<Integer> listCount;
     public ListViewModel(@NonNull Application application) {
         super(application);
         listRepo = new ListRepo(application);
         lists = listRepo.getLists();
+        listCount = listRepo.getListCount();
     }
     public void insertList(com.bit.shoppingcart.List lst){
         listRepo.insert(lst);
@@ -30,5 +32,8 @@ public class ListViewModel extends AndroidViewModel {
     }
     public LiveData<List<com.bit.shoppingcart.List>> getAllLists() {
         return lists;
+    }
+    public LiveData<Integer> getListCount() {
+        return listCount;
     }
 }

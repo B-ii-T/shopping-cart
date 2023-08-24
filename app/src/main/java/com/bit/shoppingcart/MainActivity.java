@@ -8,12 +8,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     public static ListViewModel listViewModel;
     public static ItemViewModel itemViewModel;
+    public static TextView headerText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
+        headerText = findViewById(R.id.header_textview);
         listViewModel = new ViewModelProvider(this).get(ListViewModel.class);
         itemViewModel = new ViewModelProvider(this).get(ItemViewModel.class);
         ListFragment listFragment = new ListFragment();

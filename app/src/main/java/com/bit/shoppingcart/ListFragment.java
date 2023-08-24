@@ -58,6 +58,12 @@ public class ListFragment extends Fragment {
                 }
             }
         });
+        MainActivity.listViewModel.getListCount().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer listCount) {
+                MainActivity.headerText.setText("All lists"+" "+"("+listCount+")");
+            }
+        });
         
         addListBtn.setOnClickListener(v -> {
             showCreateListDialog();

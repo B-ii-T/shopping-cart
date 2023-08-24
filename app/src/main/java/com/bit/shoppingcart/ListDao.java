@@ -12,13 +12,20 @@ import java.util.List;
 @Dao
 public interface ListDao {
     @Insert
-    void insert (com.bit.shoppingcart.List list);
+    void insert(com.bit.shoppingcart.List list);
+
     @Update
-    void update (com.bit.shoppingcart.List list);
+    void update(com.bit.shoppingcart.List list);
+
     @Delete
-    void delete (com.bit.shoppingcart.List list);
+    void delete(com.bit.shoppingcart.List list);
+
     @Query("DELETE FROM list_table")
     void deleteAll();
+
     @Query("SELECT * FROM list_table")
-        LiveData<List<com.bit.shoppingcart.List>> getAllLists();
+    LiveData<List<com.bit.shoppingcart.List>> getAllLists();
+
+    @Query("SELECT count(*) FROM list_table")
+    LiveData<Integer> getListCount();
 }

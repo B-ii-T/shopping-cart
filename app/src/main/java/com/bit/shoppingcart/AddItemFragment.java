@@ -28,8 +28,7 @@ public class AddItemFragment extends Fragment {
         itemQntInput = rootView.findViewById(R.id.qnt_input);
         addItemBtn = rootView.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
-
-
+        MainActivity.headerText.setText("New item");
         addItemBtn.setOnClickListener(V -> {
             if (itemNameInput.getText().toString().trim().isEmpty() ||
                     itemUnitPriceInput.getText().toString().trim().isEmpty() ||

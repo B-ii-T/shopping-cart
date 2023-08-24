@@ -21,14 +21,16 @@
                 android:src="@drawable/shopping_cart_logo"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="25dp"/>
+
             <TextView
+                android:id="@+id/header_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
                 android:text="All items (20)"
                 android:textColor="@color/white"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_centerInParent="true"/>
+                android:textStyle="bold" />
             <ImageView
                 android:layout_width="40dp"
                 android:layout_height="match_parent"
