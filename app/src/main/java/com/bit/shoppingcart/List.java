@@ -9,6 +9,10 @@ public class List {
     private int id;
     private String listName;
 
+    public List(String listName) {
+        this.listName = listName;
+    }
+
     public int getId() {
         return id;
     }

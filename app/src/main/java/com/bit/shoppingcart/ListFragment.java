@@ -11,6 +11,9 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -21,6 +24,16 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.list_list, container, false);
         RecyclerView listRecycler = rootview.findViewById(R.id.list_recyclerview);
+        listRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        ArrayList<List> listList = new ArrayList<>();
+        ListAdapter listAdapter = new ListAdapter(listList);
+        listRecycler.setAdapter(listAdapter);
+        MainActivity.listViewModel.getAllLists().observe(getViewLifecycleOwner(), new Observer<java.util.List<List>>() {
+            @Override
+            public void onChanged(java.util.List<List> lists) {
+                listAdapter.setItems(lists);
+            }
+        });
         return rootview;
     }
 }
