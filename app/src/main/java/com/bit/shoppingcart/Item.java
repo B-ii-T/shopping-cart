@@ -39,6 +39,10 @@ public class Item {
         return itemQuantity;
     }
 
+    public void setItemQuantity(int itemQuantity) {
+        this.itemQuantity = itemQuantity;
+    }
+
     public double getUnitPrice() {
         return unitPrice;
     }

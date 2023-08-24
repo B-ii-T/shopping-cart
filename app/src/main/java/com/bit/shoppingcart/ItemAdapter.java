@@ -5,8 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,6 +42,16 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                 holder.totalPrice.setText(String.valueOf(itemTotal));
             }
         });
+        holder.plusBtn.setOnClickListener(v -> {
+            currentItem.setItemQuantity(currentItem.getItemQuantity() + 1);
+            MainActivity.itemViewModel.updateItem(currentItem);
+        });
+        holder.minusBtn.setOnClickListener(v -> {
+            if (currentItem.getItemQuantity() > 1) {
+                currentItem.setItemQuantity(currentItem.getItemQuantity() - 1);
+            }
+            MainActivity.itemViewModel.updateItem(currentItem);
+        });
     }
 
     @Override
@@ -47,19 +59,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         return items.size();
     }
 
-    public void setItems(List<Item> items){
+    public void setItems(List<Item> items) {
         this.items = items;
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemName, itemQnt, totalPrice;
+        CardView plusBtn, minusBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemName = itemView.findViewById(R.id.item_name);
             itemQnt = itemView.findViewById(R.id.item_qnt_value);
             totalPrice = itemView.findViewById(R.id.total_value);
+            plusBtn = itemView.findViewById(R.id.plus_btn);
+            minusBtn = itemView.findViewById(R.id.minus_btn);
         }
     }
 }
