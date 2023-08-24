@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -26,6 +27,7 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.list_list, container, false);
         RecyclerView listRecycler = rootview.findViewById(R.id.list_recyclerview);
+        TextView emptyText = rootview.findViewById(R.id.empty_textview);
         listRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ArrayList<List> listList = new ArrayList<>();
         ListAdapter listAdapter = new ListAdapter(getContext(), listList);
@@ -42,6 +44,11 @@ public class ListFragment extends Fragment {
             @Override
             public void onChanged(java.util.List<List> lists) {
                 listAdapter.setLists(lists);
+                if(lists.size() < 1){
+                    emptyText.setVisibility(View.VISIBLE);
+                }else{
+                    emptyText.setVisibility(View.GONE);
+                }
             }
         });
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
@@ -28,6 +29,7 @@ public class ItemFragment extends Fragment {
         addItemBtn = rootview.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
+        TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Item> itemList = new ArrayList<>();
         ItemAdapter itemAdapter = new ItemAdapter(getContext(), itemList);
@@ -37,6 +39,11 @@ public class ItemFragment extends Fragment {
             @Override
             public void onChanged(List<Item> items) {
                 itemAdapter.setItems(items);
+                if(items.size() < 1){
+                    emptyListText.setVisibility(View.VISIBLE);
+                }else{
+                    emptyListText.setVisibility(View.GONE);
+                }
             }
         });
 
