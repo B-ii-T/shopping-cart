@@ -1,19 +1,25 @@
 package com.bit.shoppingcart;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 
@@ -28,6 +34,7 @@ public class ListFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.list_list, container, false);
         RecyclerView listRecycler = rootview.findViewById(R.id.list_recyclerview);
         TextView emptyText = rootview.findViewById(R.id.empty_textview);
+        FloatingActionButton addListBtn = rootview.findViewById(R.id.add_list_btn);
         listRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ArrayList<List> listList = new ArrayList<>();
         ListAdapter listAdapter = new ListAdapter(getContext(), listList);
@@ -51,6 +58,10 @@ public class ListFragment extends Fragment {
                 }
             }
         });
+        
+        addListBtn.setOnClickListener(v -> {
+            showCreateListDialog();
+        });
 
         // Set up the double tap back press callback
         OnBackPressedCallback doubleTapExitCallback = new OnBackPressedCallback(true) {
@@ -70,5 +81,29 @@ public class ListFragment extends Fragment {
         requireActivity().getOnBackPressedDispatcher().addCallback(this, doubleTapExitCallback);
 
         return rootview;
+    }
+    private void showCreateListDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.add_list_dialog, null);
+        builder.setView(dialogView);
+
+        EditText listNameInput = dialogView.findViewById(R.id.list_name_input);
+        Button createListBtn = dialogView.findViewById(R.id.create_list_btn);
+
+        final AlertDialog dialog = builder.create();
+        dialog.setCancelable(true);
+
+        createListBtn.setOnClickListener(V -> {
+            if(listNameInput.getText().toString().trim().isEmpty()){
+                listNameInput.setError("Required");
+            }else{
+                MainActivity.listViewModel.insertList(new List(listNameInput.getText().toString().trim()));
+                Toast.makeText(getContext(), "List created", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 }

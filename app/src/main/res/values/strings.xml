@@ -9,4 +9,6 @@
     <string name="add_item">add item</string>
     <string name="no_items_in_this_list">No items in this list</string>
     <string name="no_lists_create_a_list">No lists, create a list</string>
+    <string name="list_name">List name</string>
+    <string name="create_list">Create list</string>
 </resources>
