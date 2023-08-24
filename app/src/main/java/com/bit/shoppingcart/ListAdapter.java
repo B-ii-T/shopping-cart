@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -17,6 +16,15 @@ import java.util.List;
 public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private List<com.bit.shoppingcart.List> lists;
     private Context context;
+    private OnItemClickListener itemClickListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(int listId);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
 
     public ListAdapter(Context context, List<com.bit.shoppingcart.List> lists) {
         this.lists = lists;
@@ -32,8 +40,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ListAdapter.ViewHolder holder, int position) {
-        com.bit.shoppingcart.List currentList =lists.get(position);
+        com.bit.shoppingcart.List currentList = lists.get(position);
         holder.listName.setText(currentList.getListName());
+        holder.itemView.setOnClickListener(v -> {
+            if (itemClickListener != null) {
+                itemClickListener.onItemClick(currentList.getId());
+            }
+        });
         MainActivity.itemViewModel.getItemCount(currentList.getId()).observe((LifecycleOwner) context, new Observer<Integer>() {
             @Override
             public void onChanged(Integer itemCount) {
@@ -47,7 +60,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         return lists.size();
     }
 
-    public void setLists(List<com.bit.shoppingcart.List> lists){
+    public void setLists(List<com.bit.shoppingcart.List> lists) {
         this.lists = lists;
         notifyDataSetChanged();
     }

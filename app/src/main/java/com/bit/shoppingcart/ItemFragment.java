@@ -16,12 +16,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ItemFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.item_list, container, false);
+        int listId = getArguments().getInt("listId", -1);
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Item> itemList = new ArrayList<>();
@@ -30,6 +32,12 @@ public class ItemFragment extends Fragment {
         MainActivity.itemViewModel.getAllItems().observe(getViewLifecycleOwner(), new Observer<java.util.List<Item>>() {
             @Override
             public void onChanged(java.util.List<Item> items) {
+                itemAdapter.setItems(items);
+            }
+        });
+        MainActivity.itemViewModel.getListItems(listId).observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
+            @Override
+            public void onChanged(List<Item> items) {
                 itemAdapter.setItems(items);
             }
         });
