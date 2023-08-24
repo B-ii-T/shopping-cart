@@ -30,6 +30,7 @@ public class ListFragment extends Fragment {
         ArrayList<List> listList = new ArrayList<>();
         ListAdapter listAdapter = new ListAdapter(getContext(), listList);
         listRecycler.setAdapter(listAdapter);
+        listAdapter.notifyDataSetChanged();
         listAdapter.setOnItemClickListener(listId -> {
             Bundle args = new Bundle();
             args.putInt("listId", listId);

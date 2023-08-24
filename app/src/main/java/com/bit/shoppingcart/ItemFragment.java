@@ -9,6 +9,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -19,27 +20,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemFragment extends Fragment {
+    private CardView addItemBtn;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.item_list, container, false);
+        addItemBtn = rootview.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Item> itemList = new ArrayList<>();
         ItemAdapter itemAdapter = new ItemAdapter(getContext(), itemList);
         itemRecycler.setAdapter(itemAdapter);
-        MainActivity.itemViewModel.getAllItems().observe(getViewLifecycleOwner(), new Observer<java.util.List<Item>>() {
-            @Override
-            public void onChanged(java.util.List<Item> items) {
-                itemAdapter.setItems(items);
-            }
-        });
+        itemAdapter.notifyDataSetChanged();
         MainActivity.itemViewModel.getListItems(listId).observe(getViewLifecycleOwner(), new Observer<List<Item>>() {
             @Override
             public void onChanged(List<Item> items) {
                 itemAdapter.setItems(items);
             }
+        });
+
+        addItemBtn.setOnClickListener(v -> {
+            Bundle args = new Bundle();
+            args.putInt("listId", listId);
+            AddItemFragment addItemFragment = new AddItemFragment();
+            addItemFragment.setArguments(args);
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame, addItemFragment).commit();
         });
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
