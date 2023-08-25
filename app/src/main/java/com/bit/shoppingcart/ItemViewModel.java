@@ -54,8 +54,8 @@ public class ItemViewModel extends AndroidViewModel {
         itemTotal = itemRepo.getItemTotal(itemId);
         return itemTotal;
     }
-    public LiveData<Double> getTotal(int listId) {
-        total = itemRepo.getTotal(listId);
+    public LiveData<Double> getTotal(int listId, boolean inCart) {
+        total = itemRepo.getTotal(listId, inCart);
         return total;
     }
 }

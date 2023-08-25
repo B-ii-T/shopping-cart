@@ -33,6 +33,7 @@ public class ItemFragment extends Fragment {
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
         TextView totalValueText = rootview.findViewById(R.id.while_value_textview);
+        TextView totalInCartValueText = rootview.findViewById(R.id.yellow_value_textview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Item> itemList = new ArrayList<>();
         ItemAdapter itemAdapter = new ItemAdapter(getContext(), itemList);
@@ -55,10 +56,18 @@ public class ItemFragment extends Fragment {
                 MainActivity.headerText.setText(listName+" "+"("+itemCount+")");
             }
         });
-        MainActivity.itemViewModel.getTotal(listId).observe(getViewLifecycleOwner(), new Observer<Double>() {
+        MainActivity.itemViewModel.getTotal(listId, false).observe(getViewLifecycleOwner(), new Observer<Double>() {
             @Override
             public void onChanged(Double total) {
-                totalValueText.setText(String.valueOf(total));
+                if (total != null) totalValueText.setText(String.valueOf(total));
+                else totalValueText.setText(String.valueOf(0.0));
+            }
+        });
+        MainActivity.itemViewModel.getTotal(listId, true).observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double total) {
+                if (total != null) totalInCartValueText.setText(String.valueOf(total));
+                else totalInCartValueText.setText(String.valueOf(0.0));
             }
         });
 

@@ -15,12 +15,14 @@ public class Item {
     private int itemQuantity;
     private double unitPrice;
     private int listId;
+    private boolean inCart;
 
-    public Item(String itemName, int itemQuantity, double unitPrice, int listId) {
+    public Item(String itemName, int itemQuantity, double unitPrice, int listId, boolean inCart) {
         this.itemName = itemName;
         this.itemQuantity = itemQuantity;
         this.unitPrice = unitPrice;
         this.listId = listId;
+        this.inCart = inCart;
     }
 
     public int getId() {
@@ -49,5 +51,13 @@ public class Item {
 
     public int getListId() {
         return listId;
+    }
+
+    public boolean isInCart() {
+        return inCart;
+    }
+
+    public void setInCart(boolean inCart) {
+        this.inCart = inCart;
     }
 }

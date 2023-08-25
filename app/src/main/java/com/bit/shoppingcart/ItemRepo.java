@@ -55,8 +55,8 @@ public class ItemRepo {
         itemTotal = itemDao.getTotalById(itemId);
         return itemTotal;
     }
-    public LiveData<Double> getTotal(int listId) {
-        total = itemDao.getTotal(listId);
+    public LiveData<Double> getTotal(int listId, boolean inCart) {
+        total = itemDao.getTotal(listId, inCart);
         return total;
     }
 

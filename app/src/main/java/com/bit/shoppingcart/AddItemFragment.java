@@ -33,6 +33,7 @@ public class AddItemFragment extends Fragment {
         int itemQntArg = getArguments().getInt("itemQnt", -1);
         String itemNameArg = getArguments().getString("itemName", "");
         double itemUnitPriceArg = getArguments().getDouble("itemUnitPrice", -1);
+        boolean inCart = getArguments().getBoolean("inCart", false);
         if (itemIdArg != -1) {
             itemNameInput.setText(itemNameArg);
             itemQntInput.setText(String.valueOf(itemQntArg));
@@ -53,13 +54,13 @@ public class AddItemFragment extends Fragment {
                     Toast.makeText(getContext(), "0 is not valid", Toast.LENGTH_SHORT).show();
                 } else {
                     if (itemIdArg != -1) {
-                        Item updatedItem = new Item(itemName, itemQnt, itemUnitPrice, listId);
+                        Item updatedItem = new Item(itemName, itemQnt, itemUnitPrice, listId, inCart);
                         updatedItem.setId(itemIdArg);
                         MainActivity.itemViewModel.updateItem(updatedItem);
                         navigateBack(listId, listName);
                         Toast.makeText(getContext(), "item updated", Toast.LENGTH_SHORT).show();
                     } else {
-                        addItem(itemName, itemQnt, itemUnitPrice, listId);
+                        addItem(itemName, itemQnt, itemUnitPrice, listId, false);
                         Toast.makeText(getContext(), "item added", Toast.LENGTH_SHORT).show();
                         navigateBack(listId, listName);
                     }
@@ -89,7 +90,7 @@ public class AddItemFragment extends Fragment {
                 .commit();
     }
 
-    private void addItem(String itemName, int qnt, double unitPrice, int listId) {
-        MainActivity.itemViewModel.insertItem(new Item(itemName, qnt, unitPrice, listId));
+    private void addItem(String itemName, int qnt, double unitPrice, int listId, boolean inCart) {
+        MainActivity.itemViewModel.insertItem(new Item(itemName, qnt, unitPrice, listId, inCart));
     }
 }

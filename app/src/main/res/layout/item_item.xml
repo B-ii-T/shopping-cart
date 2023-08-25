@@ -155,7 +155,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="15dp"
                 android:layout_marginEnd="18dp"
-                android:src="@drawable/cart" />
+                android:src="@drawable/white_cart" />
 
             <ImageButton
                 android:id="@+id/item_dots_menu"
@@ -165,7 +165,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="12dp"
+                android:layout_marginEnd="10dp"
                 android:layout_marginBottom="12dp"
                 android:backgroundTint="@android:color/transparent"
                 android:src="@drawable/three_dots_menu"

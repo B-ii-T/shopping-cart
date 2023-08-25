@@ -7,9 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -62,6 +62,17 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.itemDotsMenu.setOnClickListener(v -> {
             showItemMenu(v, currentItem);
         });
+        holder.cartBtn.setOnClickListener(v -> {
+            if(currentItem.isInCart()) {
+                currentItem.setInCart(false);
+                MainActivity.itemViewModel.updateItem(currentItem);
+                holder.cartBtn.setImageResource(R.drawable.white_cart);
+            }else{
+                currentItem.setInCart(true);
+                MainActivity.itemViewModel.updateItem(currentItem);
+                holder.cartBtn.setImageResource(R.drawable.yellow_cart);
+            }
+        });
     }
 
     private void showItemMenu(View v, Item currentItem) {
@@ -84,6 +95,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     args.putInt("itemQnt", currentItem.getItemQuantity());
                     args.putInt("listId", currentItem.getListId());
                     args.putString("listName", ItemFragment.listName);
+                    args.putBoolean("inCart", currentItem.isInCart());
                     AddItemFragment addItemFragment = new AddItemFragment();
                     addItemFragment.setArguments(args);
                     FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
@@ -113,6 +125,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         TextView itemName, itemQnt, totalPrice;
         CardView plusBtn, minusBtn;
         ImageButton itemDotsMenu;
+        ImageView cartBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -122,6 +135,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             plusBtn = itemView.findViewById(R.id.plus_btn);
             minusBtn = itemView.findViewById(R.id.minus_btn);
             itemDotsMenu = itemView.findViewById(R.id.item_dots_menu);
+            cartBtn = itemView.findViewById(R.id.item_cart_btn);
         }
     }
 }
