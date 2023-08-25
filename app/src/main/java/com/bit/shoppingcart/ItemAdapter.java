@@ -1,6 +1,7 @@
 package com.bit.shoppingcart;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
@@ -73,7 +77,20 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
                     notifyDataSetChanged();
                     return true;
                 } else if (item.getItemId() == R.id.update_item) {
-                    Toast.makeText(v.getContext(), "edit item " + currentItem.getItemName(), Toast.LENGTH_SHORT).show();
+                    Bundle args = new Bundle();
+                    args.putInt("itemId", currentItem.getId());
+                    args.putString("itemName", currentItem.getItemName());
+                    args.putDouble("itemUnitPrice", currentItem.getUnitPrice());
+                    args.putInt("itemQnt", currentItem.getItemQuantity());
+                    args.putInt("listId", currentItem.getListId());
+                    args.putString("listName", ItemFragment.listName);
+                    AddItemFragment addItemFragment = new AddItemFragment();
+                    addItemFragment.setArguments(args);
+                    FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.replace(R.id.frame, addItemFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                     return true;
                 }
                 return false;

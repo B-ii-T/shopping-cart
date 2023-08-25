@@ -22,13 +22,14 @@ import java.util.List;
 
 public class ItemFragment extends Fragment {
     private CardView addItemBtn;
+    public static String listName;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.item_list, container, false);
         addItemBtn = rootview.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
-        String listName = getArguments().getString("listName", "All items");
+        listName = getArguments().getString("listName", "All items");
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
         TextView totalValueText = rootview.findViewById(R.id.while_value_textview);
@@ -82,5 +83,8 @@ public class ItemFragment extends Fragment {
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
         return rootview;
+    }
+
+    public static void goToEdit(Bundle args, AddItemFragment addItemFragment){
     }
 }

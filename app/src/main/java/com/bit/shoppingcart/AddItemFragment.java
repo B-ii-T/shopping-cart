@@ -29,6 +29,16 @@ public class AddItemFragment extends Fragment {
         addItemBtn = rootView.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
         String listName = getArguments().getString("listName", "All items");
+        int itemIdArg = getArguments().getInt("itemId", -1);
+        int itemQntArg = getArguments().getInt("itemQnt", -1);
+        String itemNameArg = getArguments().getString("itemName", "");
+        double itemUnitPriceArg = getArguments().getDouble("itemUnitPrice", -1);
+        if (itemIdArg != -1) {
+            itemNameInput.setText(itemNameArg);
+            itemQntInput.setText(String.valueOf(itemQntArg));
+            itemUnitPriceInput.setText(String.valueOf(itemUnitPriceArg));
+            addItemBtn.setText("Save");
+        }
         MainActivity.headerText.setText("New item");
         addItemBtn.setOnClickListener(V -> {
             if (itemNameInput.getText().toString().trim().isEmpty() ||
@@ -42,9 +52,17 @@ public class AddItemFragment extends Fragment {
                 if (itemQnt <= 0 || itemUnitPrice <= 0) {
                     Toast.makeText(getContext(), "0 is not valid", Toast.LENGTH_SHORT).show();
                 } else {
-                    addItem(itemName, itemQnt, itemUnitPrice, listId);
-                    Toast.makeText(getContext(), "item added", Toast.LENGTH_SHORT).show();
-                    navigateBack(listId, listName);
+                    if (itemIdArg != -1) {
+                        Item updatedItem = new Item(itemName, itemQnt, itemUnitPrice, listId);
+                        updatedItem.setId(itemIdArg);
+                        MainActivity.itemViewModel.updateItem(updatedItem);
+                        navigateBack(listId, listName);
+                        Toast.makeText(getContext(), "item updated", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addItem(itemName, itemQnt, itemUnitPrice, listId);
+                        Toast.makeText(getContext(), "item added", Toast.LENGTH_SHORT).show();
+                        navigateBack(listId, listName);
+                    }
                 }
             }
         });
