@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Shopping Cart</string>
+    <string name="app_name">List Wise</string>
     <string name="unit_static_text">unit</string>
     <string name="total_static_text">Total</string>
     <string name="currency">DA</string>
