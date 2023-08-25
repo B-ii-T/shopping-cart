@@ -14,6 +14,7 @@ public class ItemViewModel extends AndroidViewModel {
     private LiveData<java.util.List<Item>> listItems;
     LiveData<Integer> listItemCount;
     LiveData<Double> itemTotal;
+    LiveData<Double> total;
 
     public ItemViewModel(@NonNull Application application) {
         super(application);
@@ -52,5 +53,9 @@ public class ItemViewModel extends AndroidViewModel {
     public LiveData<Double> getItemTotal(int itemId) {
         itemTotal = itemRepo.getItemTotal(itemId);
         return itemTotal;
+    }
+    public LiveData<Double> getTotal(int listId) {
+        total = itemRepo.getTotal(listId);
+        return total;
     }
 }

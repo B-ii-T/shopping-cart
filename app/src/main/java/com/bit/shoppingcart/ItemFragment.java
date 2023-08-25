@@ -31,6 +31,7 @@ public class ItemFragment extends Fragment {
         String listName = getArguments().getString("listName", "All items");
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
+        TextView totalValueText = rootview.findViewById(R.id.while_value_textview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         ArrayList<Item> itemList = new ArrayList<>();
         ItemAdapter itemAdapter = new ItemAdapter(getContext(), itemList);
@@ -51,6 +52,12 @@ public class ItemFragment extends Fragment {
             @Override
             public void onChanged(Integer itemCount) {
                 MainActivity.headerText.setText(listName+" "+"("+itemCount+")");
+            }
+        });
+        MainActivity.itemViewModel.getTotal(listId).observe(getViewLifecycleOwner(), new Observer<Double>() {
+            @Override
+            public void onChanged(Double total) {
+                totalValueText.setText(String.valueOf(total));
             }
         });
 
