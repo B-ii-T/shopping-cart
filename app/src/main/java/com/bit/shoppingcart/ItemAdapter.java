@@ -43,6 +43,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         Item currentItem = items.get(position);
         holder.itemName.setText(currentItem.getItemName());
         holder.itemQnt.setText(String.valueOf(currentItem.getItemQuantity()));
+        if(currentItem.isInCart()) holder.cartBtn.setImageResource(R.drawable.yellow_cart);
+        else holder.cartBtn.setImageResource(R.drawable.white_cart);
         MainActivity.itemViewModel.getItemTotal(currentItem.getId()).observe((LifecycleOwner) context, new Observer<Double>() {
             @Override
             public void onChanged(Double itemTotal) {
