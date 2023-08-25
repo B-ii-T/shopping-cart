@@ -2,8 +2,11 @@ package com.bit.shoppingcart;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +55,31 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             }
             MainActivity.itemViewModel.updateItem(currentItem);
         });
+        holder.itemDotsMenu.setOnClickListener(v -> {
+            showItemMenu(v, currentItem);
+        });
+    }
+
+    private void showItemMenu(View v, Item currentItem) {
+        PopupMenu popupMenu = new PopupMenu(v.getContext(), v); // Pass the context and the anchor view
+        popupMenu.inflate(R.menu.item_menu); // Inflate the menu resource
+
+        // Set up a listener for menu item clicks
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if (item.getItemId() == R.id.delete_item) {
+                    MainActivity.itemViewModel.deleteItem(currentItem);
+                    notifyDataSetChanged();
+                    return true;
+                } else if (item.getItemId() == R.id.update_item) {
+                    Toast.makeText(v.getContext(), "edit item " + currentItem.getItemName(), Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+                return false;
+            }
+        });
+        popupMenu.show(); // Show the popup menu
     }
 
     @Override
@@ -67,6 +95,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemName, itemQnt, totalPrice;
         CardView plusBtn, minusBtn;
+        ImageButton itemDotsMenu;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -75,6 +104,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
             totalPrice = itemView.findViewById(R.id.total_value);
             plusBtn = itemView.findViewById(R.id.plus_btn);
             minusBtn = itemView.findViewById(R.id.minus_btn);
+            itemDotsMenu = itemView.findViewById(R.id.item_dots_menu);
         }
     }
 }

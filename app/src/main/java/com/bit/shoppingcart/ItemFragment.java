@@ -28,6 +28,7 @@ public class ItemFragment extends Fragment {
         View rootview = inflater.inflate(R.layout.item_list, container, false);
         addItemBtn = rootview.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
+        String listName = getArguments().getString("listName", "All items");
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
         TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -49,13 +50,14 @@ public class ItemFragment extends Fragment {
         MainActivity.itemViewModel.getItemCount(listId).observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
             public void onChanged(Integer itemCount) {
-                MainActivity.headerText.setText("All items"+" "+"("+itemCount+")");
+                MainActivity.headerText.setText(listName+" "+"("+itemCount+")");
             }
         });
 
         addItemBtn.setOnClickListener(v -> {
             Bundle args = new Bundle();
             args.putInt("listId", listId);
+            args.putString("listName", listName);
             AddItemFragment addItemFragment = new AddItemFragment();
             addItemFragment.setArguments(args);
             requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.frame, addItemFragment).commit();

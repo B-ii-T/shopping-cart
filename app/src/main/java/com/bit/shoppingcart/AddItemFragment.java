@@ -28,6 +28,7 @@ public class AddItemFragment extends Fragment {
         itemQntInput = rootView.findViewById(R.id.qnt_input);
         addItemBtn = rootView.findViewById(R.id.add_item_btn);
         int listId = getArguments().getInt("listId", -1);
+        String listName = getArguments().getString("listName", "All items");
         MainActivity.headerText.setText("New item");
         addItemBtn.setOnClickListener(V -> {
             if (itemNameInput.getText().toString().trim().isEmpty() ||
@@ -38,19 +39,19 @@ public class AddItemFragment extends Fragment {
                 String itemName = itemNameInput.getText().toString().trim();
                 Double itemUnitPrice = Double.parseDouble(itemUnitPriceInput.getText().toString().trim());
                 int itemQnt = Integer.parseInt(itemQntInput.getText().toString().trim());
-                if(itemQnt <= 0 || itemUnitPrice <= 0){
+                if (itemQnt <= 0 || itemUnitPrice <= 0) {
                     Toast.makeText(getContext(), "0 is not valid", Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     addItem(itemName, itemQnt, itemUnitPrice, listId);
                     Toast.makeText(getContext(), "item added", Toast.LENGTH_SHORT).show();
-                    navigateBack(listId);
+                    navigateBack(listId, listName);
                 }
             }
         });
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                navigateBack(listId);
+                navigateBack(listId, listName);
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
@@ -58,9 +59,10 @@ public class AddItemFragment extends Fragment {
         return rootView;
     }
 
-    public void navigateBack(int listId){
+    public void navigateBack(int listId, String listName) {
         Bundle args = new Bundle();
         args.putInt("listId", listId);
+        args.putString("listName", listName);
         ItemFragment itemFragment = new ItemFragment();
         itemFragment.setArguments(args);
         requireActivity().getSupportFragmentManager().beginTransaction()

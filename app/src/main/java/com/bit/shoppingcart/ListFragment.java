@@ -40,9 +40,10 @@ public class ListFragment extends Fragment {
         ListAdapter listAdapter = new ListAdapter(getContext(), listList);
         listRecycler.setAdapter(listAdapter);
         listAdapter.notifyDataSetChanged();
-        listAdapter.setOnItemClickListener(listId -> {
+        listAdapter.setOnItemClickListener((listId, listName) -> {
             Bundle args = new Bundle();
             args.putInt("listId", listId);
+            args.putString("listName", listName);
             ItemFragment itemFragment = new ItemFragment();
             itemFragment.setArguments(args);
             requireFragmentManager().beginTransaction().replace(R.id.frame, itemFragment).commit();

@@ -19,7 +19,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
     private OnItemClickListener itemClickListener;
 
     public interface OnItemClickListener {
-        void onItemClick(int listId);
+        void onItemClick(int listId, String listName);
     }
 
     public void setOnItemClickListener(OnItemClickListener listener) {
@@ -44,7 +44,7 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
         holder.listName.setText(currentList.getListName());
         holder.itemView.setOnClickListener(v -> {
             if (itemClickListener != null) {
-                itemClickListener.onItemClick(currentList.getId());
+                itemClickListener.onItemClick(currentList.getId(), currentList.getListName());
             }
         });
         MainActivity.itemViewModel.getItemCount(currentList.getId()).observe((LifecycleOwner) context, new Observer<Integer>() {
