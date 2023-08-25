@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,7 +34,7 @@ public class ListFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootview = inflater.inflate(R.layout.list_list, container, false);
         RecyclerView listRecycler = rootview.findViewById(R.id.list_recyclerview);
-        TextView emptyText = rootview.findViewById(R.id.empty_textview);
+        RelativeLayout emptyHandler = rootview.findViewById(R.id.empty_handler);
         FloatingActionButton addListBtn = rootview.findViewById(R.id.add_list_btn);
         listRecycler.setLayoutManager(new GridLayoutManager(getContext(), 2));
         ArrayList<List> listList = new ArrayList<>();
@@ -53,9 +54,9 @@ public class ListFragment extends Fragment {
             public void onChanged(java.util.List<List> lists) {
                 listAdapter.setLists(lists);
                 if(lists.size() < 1){
-                    emptyText.setVisibility(View.VISIBLE);
+                    emptyHandler.setVisibility(View.VISIBLE);
                 }else{
-                    emptyText.setVisibility(View.GONE);
+                    emptyHandler.setVisibility(View.GONE);
                 }
             }
         });

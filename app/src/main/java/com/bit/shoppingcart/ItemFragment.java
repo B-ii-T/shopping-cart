@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +33,7 @@ public class ItemFragment extends Fragment {
         int listId = getArguments().getInt("listId", -1);
         listName = getArguments().getString("listName", "All items");
         RecyclerView itemRecycler = rootview.findViewById(R.id.item_recyclerview);
-        TextView emptyListText = rootview.findViewById(R.id.empty_list_textview);
+        RelativeLayout emptyHandler = rootview.findViewById(R.id.empty_list_handler);
         TextView totalValueText = rootview.findViewById(R.id.while_value_textview);
         TextView totalInCartValueText = rootview.findViewById(R.id.yellow_value_textview);
         itemRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -44,9 +46,9 @@ public class ItemFragment extends Fragment {
             public void onChanged(List<Item> items) {
                 itemAdapter.setItems(items);
                 if(items.size() < 1){
-                    emptyListText.setVisibility(View.VISIBLE);
+                    emptyHandler.setVisibility(View.VISIBLE);
                 }else{
-                    emptyListText.setVisibility(View.GONE);
+                    emptyHandler.setVisibility(View.GONE);
                 }
             }
         });
