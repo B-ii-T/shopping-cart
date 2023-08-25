@@ -1,10 +1,13 @@
 package com.bit.shoppingcart;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
@@ -47,12 +50,33 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 itemClickListener.onItemClick(currentList.getId(), currentList.getListName());
             }
         });
+        holder.itemView.setOnLongClickListener(v -> {
+            showDeleteConfirmationDialog(v, currentList);
+            return true;
+        });
         MainActivity.itemViewModel.getItemCount(currentList.getId()).observe((LifecycleOwner) context, new Observer<Integer>() {
             @Override
             public void onChanged(Integer itemCount) {
                 holder.listItemCount.setText(itemCount + " items");
             }
         });
+    }
+        private void showDeleteConfirmationDialog(View view, com.bit.shoppingcart.List currentList) {
+        Context context = view.getContext();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("Confirm Delete")
+                .setMessage("All tasks within ths list will be deleted!\nAre you sure you want to delete this list?")
+                .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        MainActivity.listViewModel.deleteList(currentList);
+                        Toast.makeText(context, "list deleted", Toast.LENGTH_SHORT).show();
+                        notifyDataSetChanged();
+                    }
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
     }
 
     @Override
