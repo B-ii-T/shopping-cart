@@ -3,6 +3,8 @@ package com.bit.shoppingcart;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.zxing.WriterException;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
+
 
 import java.util.List;
 
@@ -53,6 +65,22 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
                 itemClickListener.onItemClick(currentList.getId(), currentList.getListName());
             }
         });
+        holder.qrCodeBtn.setOnClickListener(v -> {
+            MainActivity.itemViewModel.getListItems(currentList.getId()).observe((LifecycleOwner) context, new Observer<List<Item>>() {
+                @Override
+                public void onChanged(List<Item> items) {
+                    String sharedList = generateSharedListJson(currentList.getListName(), items);
+                    Bitmap qrCodeBitmap = generateQRCode(sharedList);
+                    if (qrCodeBitmap != null) {
+                        showQRCodeDialog(qrCodeBitmap);
+                    } else {
+                        // Handle QR code generation failure
+                        Toast.makeText(context, "Failed to generate QR code", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        });
+
         holder.deleteListBtn.setOnClickListener(v -> {
             showDeleteConfirmationDialog(v, currentList);
         });
@@ -67,7 +95,53 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
             }
         });
     }
-        private void showDeleteConfirmationDialog(View view, com.bit.shoppingcart.List currentList) {
+
+    private String generateSharedListJson(String listName, List<Item> items) {
+        JsonObject jsonList = new JsonObject();
+        jsonList.addProperty("listName", listName);
+
+        JsonArray itemsArray = new JsonArray();
+        for (Item item : items) {
+            JsonObject jsonItem = new JsonObject();
+            jsonItem.addProperty("itemName", item.getItemName());
+            jsonItem.addProperty("quantity", item.getItemQuantity());
+            jsonItem.addProperty("unitPrice", item.getUnitPrice());
+            jsonItem.addProperty("inCart", item.isInCart());
+            itemsArray.add(jsonItem);
+        }
+        jsonList.add("items", itemsArray);
+
+        return jsonList.toString();
+    }
+
+    private Bitmap generateQRCode(String data) {
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        try {
+            BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, 300, 300);
+            BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+            return barcodeEncoder.createBitmap(bitMatrix);
+        } catch (WriterException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    private void showQRCodeDialog(Bitmap qrCodeBitmap) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.qr_code_dialog, null);
+        ImageView qrCodeImageView = dialogView.findViewById(R.id.qr_code_image_view);
+        qrCodeImageView.setImageBitmap(qrCodeBitmap);
+
+        builder.setView(dialogView);
+        builder.setPositiveButton("Close", null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+
+    private void showDeleteConfirmationDialog(View view, com.bit.shoppingcart.List currentList) {
         Context context = view.getContext();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -127,13 +201,14 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView listName, listItemCount;
-        ImageView deleteListBtn;
+        ImageView deleteListBtn, qrCodeBtn;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             listName = itemView.findViewById(R.id.list_name_textview);
             listItemCount = itemView.findViewById(R.id.list_item_count);
             deleteListBtn = itemView.findViewById(R.id.delete_list_btn);
+            qrCodeBtn = itemView.findViewById(R.id.qr_code_btn);
         }
     }
 }
