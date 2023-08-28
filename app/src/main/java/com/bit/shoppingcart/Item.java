@@ -2,12 +2,13 @@ package com.bit.shoppingcart;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "item_table", foreignKeys = @ForeignKey(entity = List.class,
         parentColumns = "id",
         childColumns = "listId",
-        onDelete = ForeignKey.CASCADE))
+        onDelete = ForeignKey.CASCADE), indices = {@Index(value = "itemName", unique = true)})
 public class Item {
     @PrimaryKey(autoGenerate = true)
     private int id;

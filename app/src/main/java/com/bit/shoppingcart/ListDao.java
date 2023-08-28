@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -11,10 +12,10 @@ import java.util.List;
 
 @Dao
 public interface ListDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(com.bit.shoppingcart.List list);
 
-    @Update
+    @Update(onConflict = OnConflictStrategy.REPLACE)
     void update(com.bit.shoppingcart.List list);
 
     @Delete
@@ -28,4 +29,7 @@ public interface ListDao {
 
     @Query("SELECT count(*) FROM list_table")
     LiveData<Integer> getListCount();
+
+    @Query("SELECT id FROM list_table WHERE listName = :listName")
+    LiveData<Integer> getListId(String listName);
 }

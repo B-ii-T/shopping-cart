@@ -12,6 +12,7 @@ public class ListViewModel extends AndroidViewModel {
     private ListRepo listRepo;
     private LiveData<List<com.bit.shoppingcart.List>> lists;
     private LiveData<Integer> listCount;
+    private LiveData<Integer> listId;
     public ListViewModel(@NonNull Application application) {
         super(application);
         listRepo = new ListRepo(application);
@@ -35,5 +36,9 @@ public class ListViewModel extends AndroidViewModel {
     }
     public LiveData<Integer> getListCount() {
         return listCount;
+    }
+    public LiveData<Integer> getListId(String listName) {
+        listId = listRepo.getListId(listName);
+        return listId;
     }
 }

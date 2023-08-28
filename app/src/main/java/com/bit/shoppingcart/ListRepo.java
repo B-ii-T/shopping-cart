@@ -11,6 +11,7 @@ public class ListRepo {
     private ListDao listDao;
     private LiveData<List<com.bit.shoppingcart.List>> lists;
     private LiveData<Integer> listCount;
+    private LiveData<Integer> listId;
 
     public ListRepo(Application app) {
         Database database = Database.getDbInstance(app);
@@ -37,6 +38,10 @@ public class ListRepo {
 
     public LiveData<Integer> getListCount() {
         return listCount;
+    }
+    public LiveData<Integer> getListId(String listName) {
+        listId = listDao.getListId(listName);
+        return  listId;
     }
 
     private static class InsertAsync extends AsyncTask<com.bit.shoppingcart.List, Void, Void>{

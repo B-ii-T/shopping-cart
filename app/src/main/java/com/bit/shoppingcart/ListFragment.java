@@ -1,5 +1,6 @@
 package com.bit.shoppingcart;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
 
@@ -70,6 +77,10 @@ public class ListFragment extends Fragment {
         addListBtn.setOnClickListener(v -> {
             showCreateListDialog();
         });
+        addListBtn.setOnLongClickListener(v -> {
+            startQRCodeScanner();
+            return true;
+        });
 
         // Set up the double tap back press callback
         OnBackPressedCallback doubleTapExitCallback = new OnBackPressedCallback(true) {
@@ -86,9 +97,16 @@ public class ListFragment extends Fragment {
         };
 
         // Add the callback to the back press dispatcher
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, doubleTapExitCallback);
+        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), doubleTapExitCallback);
 
         return rootview;
+    }
+    public void startQRCodeScanner() {
+        IntentIntegrator integrator = new IntentIntegrator(getActivity());
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+        integrator.setPrompt("Scan QR Code");
+        integrator.setOrientationLocked(true);
+        integrator.initiateScan();
     }
     private void showCreateListDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -103,15 +121,30 @@ public class ListFragment extends Fragment {
         dialog.setCancelable(true);
 
         createListBtn.setOnClickListener(V -> {
-            if(listNameInput.getText().toString().trim().isEmpty()){
+            if (listNameInput.getText().toString().trim().isEmpty()) {
                 listNameInput.setError("Required");
-            }else{
-                MainActivity.listViewModel.insertList(new List(listNameInput.getText().toString().trim()));
-                Toast.makeText(getContext(), "List created", Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+            } else {
+                String newListName = listNameInput.getText().toString().trim();
+                MainActivity.listViewModel.getAllLists().observe(getViewLifecycleOwner(), lists -> {
+                    boolean listNameExists = false;
+                    for (List list : lists) {
+                        if (list.getListName().equalsIgnoreCase(newListName)) {
+                            listNameExists = true;
+                            break;
+                        }
+                    }
+                    if (listNameExists) {
+                        listNameInput.setError("List name already exists");
+                    } else {
+                        MainActivity.listViewModel.insertList(new List(newListName));
+                        Toast.makeText(getContext(), "List created", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
         dialog.show();
     }
+
 }
